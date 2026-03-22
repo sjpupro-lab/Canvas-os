@@ -20,7 +20,7 @@ Available commands:
 
 ```bash
 make -C engine/          # Build C engine
-make -C engine/ test     # Run 160+ determinism tests (0 failures expected)
+make -C engine/ test     # Run 348 determinism tests (0 failures expected)
 ```
 
 ## Architecture

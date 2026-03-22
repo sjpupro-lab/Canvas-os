@@ -18,7 +18,7 @@ L3  UI Shell        React Native Expo — 9 panels + Zustand state
 
 ```bash
 make -C engine/          # Build engine
-make -C engine/ test     # Run 160+ tests
+make -C engine/ test     # Run 348 tests (0 failures expected)
 ```
 
 ## Key Features
