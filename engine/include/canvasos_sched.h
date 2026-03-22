@@ -61,7 +61,7 @@ typedef struct {
     uint8_t     pad;
 } Process;
 
-#define PROC_MAX 64
+#define PROC_MAX 128  /* 확장: 64→128 (동적 할당 전환 전 정적 상한) */
 
 /* ---- 스케줄러 ---- */
 typedef struct {

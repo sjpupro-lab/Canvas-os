@@ -55,16 +55,16 @@ typedef enum {
     SCAN_HYBRID  = 1,
     SCAN_SPIRAL  = 2,
 } ScanMode;
-static inline ScanMode activeset_mode(float d) {
-    if (d < 0.02f) return SCAN_RING_MH;
-    if (d < 0.30f) return SCAN_HYBRID;
+/* DK-2: integer-only — thresholds: 2%=82, 30%=1229 of TILE_COUNT=4096 */
+static inline ScanMode activeset_mode(uint32_t open_count) {
+    if (open_count < 82u)   return SCAN_RING_MH;
+    if (open_count < 1229u) return SCAN_HYBRID;
     return SCAN_SPIRAL;
 }
 
 /* ---- ActiveSet ---- */
 typedef struct {
-    uint32_t open_count;
-    float    density;
+    uint32_t open_count;      /* 열린 tile 수 (0..TILE_COUNT) */
     ScanMode mode;
     uint8_t  open[TILE_COUNT];
 } ActiveSet;

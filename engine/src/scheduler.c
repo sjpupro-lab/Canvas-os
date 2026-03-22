@@ -92,18 +92,18 @@ int sched_tick(Scheduler *sc) {
         }
         if (p->energy == 0) {
             p->state = PROC_SLEEPING;
-        if (sc->ctx) {
-            WhRecord wr = {0};
-            wr.tick_or_event = sc->tick;
-            wr.opcode_index  = WH_OP_SLEEP;
-            wr.flags         = 0;
-            wr.param0        = 0;
-            wr.target_addr   = (uint32_t)p->pid;
-            wr.target_kind   = WH_TGT_PROC;
-            wr.arg_state     = (uint8_t)p->state;
-            wr.param1        = 0;
-            wh_write_record(sc->ctx, ((uint64_t)sc->tick<<8) | (uint64_t)(p->pid & 0xFFu), &wr);
-        }
+            if (sc->ctx) {
+                WhRecord wr = {0};
+                wr.tick_or_event = sc->tick;
+                wr.opcode_index  = WH_OP_SLEEP;
+                wr.flags         = 0;
+                wr.param0        = 0;
+                wr.target_addr   = (uint32_t)p->pid;
+                wr.target_kind   = WH_TGT_PROC;
+                wr.arg_state     = (uint8_t)p->state;
+                wr.param1        = 0;
+                wh_write_record(sc->ctx, ((uint64_t)sc->tick<<8) | (uint64_t)(p->pid & 0xFFu), &wr);
+            }
             gate_close_space_sched(sc, p->space);
         }
     }

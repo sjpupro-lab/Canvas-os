@@ -26,7 +26,9 @@ int main(void) {
 
     /* 3. Adaptive mode: boot_cross → density 확인 */
     activeset_boot_cross(&as);
-    printf("density=%.2f%% mode=%s\n", as.density*100.f, scanmode_name(as.mode));
+        printf("density=%.2f%% mode=%s\n",
+            (double)(as.open_count * 100u) / TILE_COUNT,
+            scanmode_name(as.mode));
     assert(as.open_count > 0);
 
     printf("[PASS] test_gate\n");

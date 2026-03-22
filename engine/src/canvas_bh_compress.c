@@ -130,6 +130,7 @@ int bh_compress(EngineContext *ctx, const BhSummary *s,
 
     /* [DK-1] 틱 경계 검증 */
     ASSERT_TICK_BOUNDARY(ctx, *guard);
+    (void)guard; /* release 빌드: macro가 no-op일 때 경고 억제 */
 
     /* BH_SUMMARY를 현재 tick 위치에 WH로 기록 */
     WhRecord r;

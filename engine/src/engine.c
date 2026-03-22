@@ -21,7 +21,8 @@ extern void activeset_close(ActiveSet *as, uint32_t tile_id);
 extern int  activeset_is_open(const ActiveSet *as, uint16_t x, uint16_t y);
 extern const char *scanmode_name(ScanMode m);
 
-/* --- Canvas state --- */
+#ifdef ENGINE_DEMO_MAIN
+/* --- Canvas state (demo only) --- */
 static Cell       canvas[CANVAS_W * CANVAS_H];
 static ActiveSet  aset;
 static EnergyConfig ecfg = { .decay_rate = 1, .enabled = true };
@@ -95,8 +96,6 @@ static bool run_frame_adaptive(void) {
     }
     return true;
 }
-
-#ifdef ENGINE_DEMO_MAIN
 int main(void) {
     memset(canvas, 0, sizeof(canvas));
     activeset_init(&aset);
@@ -120,8 +119,9 @@ int main(void) {
     }
 
     printf("=== CanvasOS Phase 1 ===\n");
-    printf("Scan mode: %s (density=%.1f%%)\n",
-           scanmode_name(aset.mode), aset.density * 100.0f);
+    printf("Scan mode: %s (density=%u%%)\n",
+           scanmode_name(aset.mode),
+           (unsigned)(aset.open_count * 100u / TILE_COUNT));
     printf("Output: ");
 
     bool ok = run_frame_adaptive();
@@ -132,3 +132,4 @@ int main(void) {
     return 0;
 }
 #endif /* ENGINE_DEMO_MAIN */
+/* ENGINE_DEMO_MAIN section ends above */

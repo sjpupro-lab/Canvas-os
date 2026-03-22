@@ -15,8 +15,7 @@ static void activeset_recalc(ActiveSet *as) {
     uint32_t cnt = 0;
     for (int i = 0; i < TILE_COUNT; i++) cnt += as->open[i];
     as->open_count = cnt;
-    as->density    = (float)cnt / (float)TILE_COUNT;
-    as->mode       = activeset_mode(as->density);
+    as->mode       = activeset_mode(cnt);
 }
 
 void activeset_open(ActiveSet *as, uint32_t tile_id) {
@@ -24,8 +23,7 @@ void activeset_open(ActiveSet *as, uint32_t tile_id) {
     if (as->open[tile_id]) return; /* already open, skip recalc */
     as->open[tile_id] = 1;
     as->open_count++;
-    as->density = (float)as->open_count / (float)TILE_COUNT;
-    as->mode    = activeset_mode(as->density);
+    as->mode = activeset_mode(as->open_count);
 }
 
 void activeset_close(ActiveSet *as, uint32_t tile_id) {
@@ -33,8 +31,7 @@ void activeset_close(ActiveSet *as, uint32_t tile_id) {
     if (!as->open[tile_id]) return;
     as->open[tile_id] = 0;
     as->open_count--;
-    as->density = (float)as->open_count / (float)TILE_COUNT;
-    as->mode    = activeset_mode(as->density);
+    as->mode = activeset_mode(as->open_count);
 }
 
 int activeset_is_open(const ActiveSet *as, uint16_t x, uint16_t y) {

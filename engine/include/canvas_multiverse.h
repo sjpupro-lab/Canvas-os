@@ -91,8 +91,8 @@ static inline WH_BH_Zone zone_q2(void) {
 
 /* ---- Multiverse 설정 ---- */
 typedef struct {
-    /* 활성 Lane 수 */
-    uint8_t      lane_count;
+    /* 활성 Lane 수 (uint16_t: LANE_ID_MAX=256 비교 가능) */
+    uint16_t     lane_count;
     LaneTable    lanes;
 
     /* 활성 Branch 수 */

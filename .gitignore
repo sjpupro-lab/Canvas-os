@@ -8,10 +8,18 @@
 *.bin
 
 # Compiled binaries
+engine/canvasos
 engine/canvasos_launcher
 engine/canvasos_cli
 engine/tervas
 spatial/c_native/sj_cvp1
+
+# Test binaries
+engine/tests/test_scan
+engine/tests/test_gate
+engine/tests/test_canvasfs
+engine/tests/test_scheduler
+engine/tests/test_cvp
 
 # IDE
 .vscode/

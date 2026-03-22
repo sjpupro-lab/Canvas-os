@@ -170,6 +170,8 @@ static inline bool dk_check_determinism(uint32_t hash_a, uint32_t hash_b,
         fprintf(stderr,
             "[DK VIOLATION] %s: canvas hash mismatch "
             "(0x%08x != 0x%08x)\n", label, hash_a, hash_b);
+#else
+    (void)label;
 #endif
         return false;
     }
