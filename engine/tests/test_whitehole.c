@@ -82,6 +82,14 @@ static void test_wh_circular(void) {
     TEST_EQ("count == WH_CAPACITY when full", (int)wh_count(&wh), WH_CAPACITY);
     TEST_EQ("total == WH_CAPACITY", (int)wh.total, WH_CAPACITY);
 
+    /* head wraps to 0 exactly at capacity — reads must still work (bug fix) */
+    TEST_EQ("head == 0 when exactly full", (int)wh.head, 0);
+    WhRecord r_full;
+    bool ok_full = wh_read(&wh, 0, &r_full);
+    TEST_TRUE("wh_read still works when head==0 and buffer exactly full", ok_full);
+    TEST_EQ("newest value == WH_CAPACITY-1 when exactly full",
+            (int)r_full.value, WH_CAPACITY - 1);
+
     /* Write one more — should overwrite oldest */
     wh_log(&wh, (uint64_t)WH_CAPACITY, WH_EVT_HASH, 0, 9999, "overflow");
     TEST_EQ("count still WH_CAPACITY after overflow", (int)wh_count(&wh), WH_CAPACITY);

@@ -110,6 +110,13 @@ static void test_sched_kill(void) {
     bool bad = sched_kill(&s, 99999);
     TEST_FALSE("kill non-existent returns false", bad);
 
+    /* kill_name sets exit_code (same as sched_kill) */
+    ProcId p4 = sched_spawn(&s, 0, "check_exit");
+    sched_kill_name(&s, "check_exit");
+    ProcEntry* e4 = sched_find(&s, p4);
+    TEST_NOT_NULL("kill_name proc found as zombie", e4);
+    TEST_EQ("kill_name sets exit_code == 1", e4->exit_code, 1);
+
     /* NULL safety */
     TEST_FALSE("kill_name NULL", sched_kill_name(NULL, "x"));
 }
@@ -135,6 +142,16 @@ static void test_sched_tick(void) {
     TEST_TRUE("sched_to_json returns > 0", n > 0);
     TEST_TRUE("json starts with '['", buf[0] == '[');
     TEST_TRUE("json contains 'pid'", strstr(buf, "pid") != NULL);
+
+    /* JSON escaping: name with quotes should not break JSON */
+    Scheduler s2;
+    sched_init(&s2);
+    sched_spawn(&s2, 0, "proc\"with\\quotes");
+    char buf2[2048];
+    sched_to_json(&s2, buf2, sizeof(buf2));
+    /* The raw quote should not appear unescaped in output */
+    TEST_FALSE("JSON escaped: raw quote not in name field",
+               strstr(buf2, "\"proc\"with") != NULL);
 
     /* List */
     ProcEntry list[PROC_MAX];

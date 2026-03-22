@@ -35,7 +35,7 @@ int  gpu_scan_active_set(GpuCtx* g, uint32_t* out, int cap);
 typedef struct {
     uint32_t region_start;
     uint32_t region_len;
-    uint32_t hash;        /* FNV-1a of region */
+    uint64_t hash;        /* FNV-1a of region (64-bit, DK-5) */
 } BhSummary;
 
 int  gpu_bh_summarize_idle(GpuCtx* g, BhSummary* out, int cap);

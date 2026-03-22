@@ -5,6 +5,7 @@
  */
 
 #include "canvasos.h"
+#include "canvasos_json.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -130,10 +131,12 @@ int branch_list_json(char* buf, int cap) {
     for (int i = 0; i < BRANCH_MAX; i++) {
         BranchEntry* e = &g_branch_table.branches[i];
         if (!e->active) continue;
+        char esc_name[BRANCH_NAME_LEN * 2];
+        json_escape_str(e->name, esc_name, sizeof(esc_name));
         int n = snprintf(buf + written, (size_t)(cap - written),
             "%s{\"id\":%u,\"parent\":%u,\"name\":\"%s\",\"tick\":%llu}",
             first ? "" : ",",
-            e->id, e->parent, e->name,
+            e->id, e->parent, esc_name,
             (unsigned long long)e->created_tick);
         if (n < 0 || written + n >= cap - 2) break;
         written += n;

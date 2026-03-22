@@ -1,6 +1,6 @@
 /*
  * Canvas OS — Test Runner
- * Runs all 347 determinism tests
+ * Runs all 357 determinism tests
  * Expected: 0 failures
  */
 

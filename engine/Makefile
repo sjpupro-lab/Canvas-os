@@ -1,7 +1,7 @@
 # Canvas OS — Engine Makefile
 # Usage:
 #   make          — build engine binaries
-#   make test     — run 347 determinism tests (0 failures expected)
+#   make test     — run 357 determinism tests (0 failures expected)
 
 CC      := gcc
 CFLAGS  := -Wall -Wextra -Wpedantic -std=c11 \

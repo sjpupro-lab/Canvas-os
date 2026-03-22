@@ -1,7 +1,7 @@
 /*
- * Canvas OS — Shell REPL (15 builtins)
+ * Canvas OS — Shell REPL (16 builtins)
  * Builtins: ps, kill, ls, cd, mkdir, rm, cat, echo,
- *           hash, info, det, timewarp, env, help, exit
+ *           hash, info, det, timewarp, env, help, exit, branch
  */
 
 #include "canvasos.h"
@@ -160,7 +160,7 @@ int shell_exec(EngineContext* ctx, const char* cmd,
     if (strcmp(verb, "help") == 0) {
         snprintf(out, (size_t)out_cap,
                  "builtins: ps kill ls cd mkdir rm cat echo "
-                 "hash info det timewarp env help exit\n");
+                 "hash info det timewarp env help exit branch\n");
         return 0;
     }
 

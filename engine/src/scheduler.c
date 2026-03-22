@@ -3,6 +3,7 @@
  */
 
 #include "canvasos_sched.h"
+#include "canvasos_json.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -69,7 +70,8 @@ bool sched_kill_name(Scheduler* s, const char* name) {
     for (int i = 0; i < PROC_MAX; i++) {
         if (s->table[i].state == PROC_STATE_RUNNING &&
             strncmp(s->table[i].name, name, PROC_NAME_LEN) == 0) {
-            s->table[i].state = PROC_STATE_ZOMBIE;
+            s->table[i].state     = PROC_STATE_ZOMBIE;
+            s->table[i].exit_code = 1;
             killed = true;
         }
     }
@@ -140,10 +142,12 @@ int sched_to_json(const Scheduler* s, char* buf, int cap) {
     for (int i = 0; i < PROC_MAX && written < cap - 4; i++) {
         const ProcEntry* p = &s->table[i];
         if (p->state == PROC_STATE_FREE) continue;
+        char esc_name[PROC_NAME_LEN * 2];
+        json_escape_str(p->name, esc_name, sizeof(esc_name));
         int n = snprintf(buf + written, (size_t)(cap - written),
             "%s{\"pid\":%u,\"name\":\"%s\",\"state\":%d,\"ticks\":%llu}",
             first ? "" : ",",
-            p->pid, p->name, (int)p->state,
+            p->pid, esc_name, (int)p->state,
             (unsigned long long)p->ticks_alive);
         if (n < 0 || written + n >= cap - 4) break;
         written += n;

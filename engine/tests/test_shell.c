@@ -55,6 +55,13 @@ static void test_shell_builtins(void) {
     TEST_TRUE("help lists 'ps'", strstr(out, "ps") != NULL);
     TEST_TRUE("help lists 'echo'", strstr(out, "echo") != NULL);
     TEST_TRUE("help lists 'hash'", strstr(out, "hash") != NULL);
+    TEST_TRUE("help lists 'branch'", strstr(out, "branch") != NULL);
+
+    /* branch */
+    rc = shell_exec(ctx, "branch", out, sizeof(out));
+    TEST_EQ("branch returns 0", rc, 0);
+    rc = shell_exec(ctx, "branch list", out, sizeof(out));
+    TEST_EQ("branch list returns 0", rc, 0);
 
     /* ps */
     rc = shell_exec(ctx, "ps", out, sizeof(out));

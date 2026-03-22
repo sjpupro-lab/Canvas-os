@@ -3,6 +3,7 @@
  */
 
 #include "canvasos_wh.h"
+#include "canvasos_json.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -49,12 +50,12 @@ bool wh_read(const WhiteHole* wh, uint32_t offset, WhRecord* out) {
 
     /* newest is at (head - 1), offset 0 = newest */
     uint32_t idx;
-    if (wh->total <= WH_CAPACITY) {
-        /* buffer not wrapped: entries are 0..head-1, newest = head-1 */
-        if (wh->head == 0) return false;
+    if (wh->total < WH_CAPACITY) {
+        /* buffer not wrapped: entries are 0..head-1, newest = head-1
+         * total < WH_CAPACITY guarantees head > 0 (at least one write) */
         idx = (wh->head - 1 + WH_CAPACITY - offset) % WH_CAPACITY;
     } else {
-        /* buffer wrapped: newest = head-1 (mod CAP) */
+        /* buffer wrapped (or exactly full): newest = head-1 (mod CAP) */
         idx = (wh->head - 1 + WH_CAPACITY - offset) % WH_CAPACITY;
     }
     *out = wh->records[idx];
@@ -72,6 +73,8 @@ int wh_to_json(const WhiteHole* wh, int last_n, char* buf, int cap) {
     for (int i = last_n - 1; i >= 0 && written < cap - 2; i--) {
         WhRecord r;
         if (!wh_read(wh, (uint32_t)i, &r)) continue;
+        char esc_msg[WH_MSG_LEN * 2];
+        json_escape_str(r.msg, esc_msg, sizeof(esc_msg));
         int n = snprintf(buf + written, (size_t)(cap - written),
             "%s{\"tick\":%llu,\"type\":%d,\"cell\":%u,\"val\":%u,\"msg\":\"%s\"}",
             (i == last_n - 1) ? "" : ",",
@@ -79,7 +82,7 @@ int wh_to_json(const WhiteHole* wh, int last_n, char* buf, int cap) {
             (int)r.type,
             r.cell_index,
             r.value,
-            r.msg);
+            esc_msg);
         if (n < 0 || written + n >= cap - 2) break;
         written += n;
     }
