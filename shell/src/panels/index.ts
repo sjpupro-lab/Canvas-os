@@ -1,0 +1,9 @@
+import './TerminalPanel';
+import './CellInspectorPanel';
+import './GatePanel';
+import './BranchPanel';
+import './TimelinePanel';
+import './DiffPanel';
+import './TracePanel';
+import './MinimapPanel';
+import './ProcessPanel';
