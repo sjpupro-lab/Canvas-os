@@ -1,0 +1,7 @@
+build/
+*.o
+*.a
+canvasos_test
+canvasos_launcher
+canvasos_cli
+tervas
